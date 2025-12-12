@@ -1,4 +1,3 @@
-package assignments.Ex2;
 
 public class Index2D implements Pixel2D {
     public Index2D(int w, int h) {
