@@ -50,4 +50,5 @@ public class Index2DTest {
     public void Testequals3(){
         assertFalse(p1.equals(a));
     }
+
 }

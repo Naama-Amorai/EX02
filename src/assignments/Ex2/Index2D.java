@@ -36,9 +36,7 @@ public class Index2D implements Pixel2D {
 
     @Override
     public String toString() {
-        String ans = null;
-        System.out.println("Index X: " + this.X + " ,Index Y: " + this.Y);
-        return ans;
+        return ("Index X: " + this.X + " ,Index Y: " + this.Y);
     }
 
     @Override
