@@ -53,25 +53,35 @@ We performed **comprehensive unit tests** for all map operations using **JUnit 5
 
 ---
 
-## **Visualizing the Shortest Path (Cyclic)**
-Following the implementation of the `shortestPath` function, the image below demonstrates its behavior on a **Cyclic (Wrapping) Map**:
+
+## **Algorithmic Map Visualizations: Shortest Path & Distance Fields**
+These visualizations demonstrate the core algorithms of the project operating on a **Cyclic (Wrapping) Map**, where paths and distances extend beyond the grid boundaries.
 
 ---
 
-### **Visual Legend**
+### **1. Shortest Path Visualization**
+This image shows the `shortestPath` function identifying the most efficient route by **wrapping around the map edges**.
+
+**Visual Legend:**
 - ⬛ **Black:** Obstacles (`-1`)
 - 🟧 **Orange:** Start point
 - 🟩 **Green:** Target point
-- 🟥 **Red Circles:** The computed shortest path
+- 🟥 **Red Circles:** The optimal path crossing from the right edge to the left
 
----
 
-### **Key Observation**
-The visualization highlights the algorithm's ability to **wrap around map boundaries**.  
-Instead of following a long path within the grid, it identifies a more efficient route by crossing from the **right edge directly to the left**, significantly minimizing the total distance.
-
----
 <img width="998" height="996" alt="image" src="https://github.com/user-attachments/assets/734d8a2a-f69d-409c-85e1-655c41f08d0b" />
+---
+
+### **2. All-Distance Map Visualization**
+This visualization displays the result of the `allDistance` function, calculating the distance from a single source to all reachable points.
+
+**Visual Legend:**
+- ⬜ **White (Center):** The source point from which all distances are measured
+- ⬛ **Black:** Obstacles that block the distance propagation
+- 🌈 **Color Gradient:** Represents the distance value of each cell  
+  Due to the **Cyclic nature** of the map, distances radiate and meet from opposite sides of the grid.
+
+<img width="992" height="1016" alt="image" src="https://github.com/user-attachments/assets/1eae2eeb-f7ec-4c40-bb83-ca1a974f4225" />
 
 ---
 
