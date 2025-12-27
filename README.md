@@ -53,6 +53,28 @@ We performed **comprehensive unit tests** for all map operations using **JUnit 5
 
 ---
 
+## **Visualizing the Shortest Path (Cyclic)**
+Following the implementation of the `shortestPath` function, the image below demonstrates its behavior on a **Cyclic (Wrapping) Map**:
+
+---
+
+### **Visual Legend**
+- ⬛ **Black:** Obstacles (`-1`)
+- 🟧 **Orange:** Start point
+- 🟩 **Green:** Target point
+- 🟥 **Red Circles:** The computed shortest path
+
+---
+
+### **Key Observation**
+The visualization highlights the algorithm's ability to **wrap around map boundaries**.  
+Instead of following a long path within the grid, it identifies a more efficient route by crossing from the **right edge directly to the left**, significantly minimizing the total distance.
+
+---
+<img width="998" height="996" alt="image" src="https://github.com/user-attachments/assets/734d8a2a-f69d-409c-85e1-655c41f08d0b" />
+
+---
+
 ## **Technical Specifications**
 - **Language:** Java  
 - **IDE:** IntelliJ IDEA  
