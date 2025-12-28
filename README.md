@@ -69,7 +69,7 @@ This image shows the `shortestPath` function identifying the most efficient rout
 - 🟥 **Red Circles:** The optimal path crossing from the right edge to the left
 
 
-<img width="998" height="996" alt="image" src="https://github.com/user-attachments/assets/734d8a2a-f69d-409c-85e1-655c41f08d0b" />
+<img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/734d8a2a-f69d-409c-85e1-655c41f08d0b" />
 ---
 
 ### **2. All-Distance Map Visualization**
@@ -81,7 +81,7 @@ This visualization displays the result of the `allDistance` function, calculatin
 - 🌈 **Color Gradient:** Represents the distance value of each cell  
   Due to the **Cyclic nature** of the map, distances radiate and meet from opposite sides of the grid.
 
-<img width="992" height="1016" alt="image" src="https://github.com/user-attachments/assets/1eae2eeb-f7ec-4c40-bb83-ca1a974f4225" />
+<img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/1eae2eeb-f7ec-4c40-bb83-ca1a974f4225" />
 
 ---
 
