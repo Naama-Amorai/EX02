@@ -284,6 +284,17 @@ class MapTest {
         assertEquals(2,_m1.getPixel(6,0));
     }
     @Test
+    public void testfill3() {
+        Map _m1 = new Map(10, 10, 0);
+        Pixel2D p1 = new Index2D(12, 2);
+        Pixel2D p2 = new Index2D(4, 0);
+        Pixel2D p3 = new Index2D(4, 9);
+        _m1.drawLine(p2 , p3 , 1 );
+        assertThrows(Exception.class, () ->{
+            _m1.fill(p1 , 2 , false);
+        });
+    }
+    @Test
     public void testshortestPath() {
         Map _m1 = new Map(10,10,0);
         Pixel2D p1 = new Index2D(4,0);

@@ -308,15 +308,23 @@ public class Map implements Map2D, Serializable {
 
     @Override
     /**
-     * Fills this map with the new color (new_v) starting from p.
-     * https://en.wikipedia.org/wiki/Flood_fill
+     * Fills a connected area of pixels with a new value (Flood Fill).
+     * Starting from the given index (xy), the function identifies all reachable pixels
+     * that share the same original value and have a continuous path of that value between them.
+     * It uses a BFS (Breadth-First Search) algorithm with a Queue to scan the 4-neighbors
+     * of each pixel. If cyclic is true, neighbors are calculated with wrap-around logic.
+     * The function throws a RuntimeException if the starting point is null or outside the map,
+     * returns 0 if the new value is identical to the current one, and otherwise returns
+     * the total count of pixels that were successfully updated.
+     * * @param xy The starting pixel coordinates.
+     * @param new_v The new value to set.
+     * @param cyclic Whether the fill should wrap around map boundaries.
+     * @return counter The number of pixels whose value was changed.
+     * @throws RuntimeException if xy is null or not inside the map boundaries.
      */
     public int fill(Pixel2D xy, int new_v, boolean cyclic) {
         int counter = 0;
-        if (xy == null) {
-            throw new RuntimeException();
-        }
-        if (!isInside(xy)) {
+        if (xy == null || !isInside(xy)) {
             throw new RuntimeException();
         }
         int old_color = getPixel(xy);
@@ -348,42 +356,36 @@ public class Map implements Map2D, Serializable {
                     }
                 }
             }
-//                if (isInside(neighbor1) && getPixel(neighbor1) == old_color){
-//                    setPixel(neighbor1 , new_v);
-//                    q.add(neighbor1);
-//                    counter ++;
-//                }
-//                if (isInside(neighbor2) && getPixel(neighbor2) == old_color){
-//                    setPixel(neighbor2 , new_v);
-//                    q.add(neighbor2);
-//                    counter ++;
-//                }
-//                if (isInside(neighbor3) && getPixel(neighbor3) == old_color){
-//                    setPixel(neighbor3 , new_v);
-//                    q.add(neighbor3);
-//                    counter ++;
-//                }
-//                if (isInside(neighbor4) && getPixel(neighbor4) == old_color){
-//                    setPixel(neighbor4 , new_v);
-//                    q.add(neighbor4);
-//                    counter ++;
-//                }
-//            }
+
     return counter;
     }
 
 	@Override
-	/**
-	 * BFS like shortest the computation based on iterative raster implementation of BFS, see:
-	 * https://en.wikipedia.org/wiki/Breadth-first_search
-	 */
+    /**
+     * Calculates the shortest path between two points on the map using a BFS algorithm.
+     * The function finds the most efficient route from p1 to p2 by performing a breadth-first
+     * search (BFS) that scans the 4-neighbors of each pixel while avoiding the obstacle color.
+     * If the cyclic flag is true, neighbors are calculated using wrap-around logic.
+     * During the scan, a 2D array tracks the "parent" of each visited pixel to store the path.
+     * If p2 is not reached by the end of the scan, the function determines that no path
+     * exists and returns null. If a path is found, the algorithm backtracks from p2 back
+     * to p1 using the parent pointers, and then reverses this sequence to return an
+     * ordered array starting from p1.
+     * * @param p1 The starting pixel coordinates.
+     * @param p2 The target pixel coordinates.
+     * @param obsColor The value representing impassable obstacles.
+     * @param cyclic Whether the path can wrap around map boundaries.
+     * @return An array of Pixel2D representing the shortest path, or null if no path exists.
+     * @throws RuntimeException if p1 or p2 are null or outside the map boundaries.
+     */
 	public Pixel2D[] shortestPath(Pixel2D p1, Pixel2D p2, int obsColor, boolean cyclic) {
-		Pixel2D[] ans = null;  // the result.
+		Pixel2D[] ans = null;
         if (p1 == null || p2 == null || !isInside(p1) || !isInside(p2)){
             throw new RuntimeException();
         }
         if (p1.equals(p2)){
-            return new Pixel2D[] {p1};
+            ans = new Pixel2D[] {p1};
+            return ans;
         }
         Pixel2D [][] savepath = new Pixel2D[this.getWidth()][this.getHeight()];
         savepath [p1.getX()][p1.getY()] = p1;
@@ -412,31 +414,10 @@ public class Map implements Map2D, Serializable {
                         savepath[n.getX()][n.getY()] = current;
                         q.add(n);
                     }
+                }
+
             }
-//            if (isInside(neighbor1) && getPixel(neighbor1) != obsColor){
-//                if (savepath [neighbor1.getX()][neighbor1.getY()] == null) {
-//                    savepath[neighbor1.getX()][neighbor1.getY()] = current;
-//                    q.add(neighbor1);
-//                }
-//            }
-//            if (isInside(neighbor2) && getPixel(neighbor2) != obsColor){
-//                if (savepath [neighbor2.getX()][neighbor2.getY()] == null) {
-//                    savepath[neighbor2.getX()][neighbor2.getY()] = current;
-//                    q.add(neighbor2);
-//                }
-//            }
-//            if (isInside(neighbor3) && getPixel(neighbor3) != obsColor){
-//                if (savepath [neighbor3.getX()][neighbor3.getY()] == null) {
-//                    savepath[neighbor3.getX()][neighbor3.getY()] = current;
-//                    q.add(neighbor3);
-//                }
-//            }
-//            if (isInside(neighbor4) && getPixel(neighbor4) != obsColor){
-//                if (savepath [neighbor4.getX()][neighbor4.getY()] == null) {
-//                    savepath[neighbor4.getX()][neighbor4.getY()] = current;
-//                    q.add(neighbor4);
-//                }
-            }}
+        }
         if (savepath [p2.getX()][p2.getY()] == null){
             return ans;
         }
@@ -456,23 +437,21 @@ public class Map implements Map2D, Serializable {
         return ans;
 	}
 
-//@Override
-//    public Map2D allDistance(Pixel2D start, int obsColor, boolean cyclic) {
-//        Map2D ans = new Map(this.getWidth() , this.getHeight(),0);
-//        for (int i = 0; i < ans.getWidth(); i++) {
-//            for (int j = 0; j < ans.getHeight(); j++) {
-//                Pixel2D current = new Index2D(i, j );
-//                Pixel2D[] short_ans = shortestPath(start, current, obsColor, cyclic);
-//                if (short_ans == null){
-//                    ans.setPixel(i , j , -1);
-//                }
-//                else {
-//                    ans.setPixel(i , j , short_ans.length-1);
-//                }
-//            }
-//        }
-//        return ans;
-//    }
+    /**
+     * Calculates the distance from a starting point to all reachable pixels on the map.
+     * The function initializes a new map where all pixels start with the value -1 (unreachable).
+     * It then uses a BFS (Breadth-First Search) algorithm to explore the map starting from
+     * the 'start' pixel, which is assigned a distance of 0. For each pixel, the algorithm
+     * scans its 4-neighbors, ignoring obstacles and already visited pixels. If cyclic is true,
+     * neighbors are calculated with wrap-around logic. Each discovered neighbor is assigned
+     * a distance value of (current distance + 1) and added to the queue for further expansion.
+     * The final result is a distance map where each reachable pixel contains its shortest
+     * distance from the source, while unreachable pixels or obstacles remain -1.
+     * * @param start The source pixel from which distances are measured.
+     * @param obsColor The value representing impassable obstacles.
+     * @param cyclic Whether the calculation should wrap around map boundaries.
+     * @return A Map2D where each pixel holds its distance from the start or -1 if unreachable.
+     */
     @Override
     public Map2D allDistance(Pixel2D start, int obsColor, boolean cyclic) {
         Map2D ans = new Map(this.getWidth(), this.getHeight(), -1);
@@ -501,23 +480,6 @@ public class Map implements Map2D, Serializable {
                     q.add(n);
                 }
             }
-//
-//            if (isInside(neighbor1) && getPixel(neighbor1) != obsColor && ans.getPixel(neighbor1) == -1){
-//                    ans.setPixel(neighbor1 , (ans.getPixel(current)+1) );
-//                    q.add(neighbor1);
-//            }
-//            if (isInside(neighbor2) && getPixel(neighbor2) != obsColor && ans.getPixel(neighbor2) == -1){
-//                ans.setPixel(neighbor2 , (ans.getPixel(current)+1) );
-//                q.add(neighbor2);
-//            }
-//            if (isInside(neighbor3) && getPixel(neighbor3) != obsColor && ans.getPixel(neighbor3) == -1){
-//                ans.setPixel(neighbor3 , (ans.getPixel(current)+1) );
-//                q.add(neighbor3);
-//            }
-//            if (isInside(neighbor4) && getPixel(neighbor4) != obsColor && ans.getPixel(neighbor4) == -1){
-//                ans.setPixel(neighbor4 , (ans.getPixel(current)+1) );
-//                q.add(neighbor4);
-//            }
        }
         return ans;
     }

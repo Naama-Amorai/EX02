@@ -72,9 +72,8 @@ public class Ex2_GUI {
                     ans.setPixel(j, i, pixelValue);
                 } catch (NumberFormatException e) {
                     System.out.println(parts[j] + "isn't an Integer value");
-                    ans.setPixel(j, i, 00);
+                    ans.setPixel(j, i, 0);
                 }
-                ans.setPixel(j, i, Integer.parseInt(parts[j]));
             }
         }
         return ans;
@@ -90,7 +89,7 @@ public class Ex2_GUI {
         FileWriter myFile = new FileWriter(file);
         for (int i = 0; i < map.getHeight(); i++) {
             for (int j = 0; j < map.getWidth(); j++) {
-                myFile.write(map.getPixel(j, i) + "\t");
+            myFile.write(String.format("%4d", map.getPixel(j, i)));
             }
             myFile.write("\n");
         }
@@ -99,14 +98,20 @@ public class Ex2_GUI {
 
     public static void main(String[] a) throws IOException {
         Map mymap = new Map(10,10,0);
-       StdDraw.setCanvasSize(800,800);
+        StdDraw.setCanvasSize(800,800);
         Pixel2D p1 = new Index2D(1,1);
-        Pixel2D p2 = new Index2D(1, mymap.getHeight()-2);
-        Pixel2D start = new Index2D(1,1);
-        Pixel2D end = new Index2D(1,1);
+        Pixel2D p2 = new Index2D(2, mymap.getHeight()-2);
+        mymap.drawRect(p1 , p2 , -1);
+        saveMap(mymap , "map.txt");
+        Pixel2D start = new Index2D(0,0);
         mymap.drawRect(p1 , p2 , -1);
         drawMap(mymap);
         StdDraw.pause(1000);
+        Map2D myloadmap =loadMap("map.txt");
+        myloadmap = myloadmap.allDistance(start , -1 , true);
+        saveMap(myloadmap , "map_allDistance.txt");
+        drawMap(myloadmap);
+
 //        System.out.println("clik on start point");
 //        while (!StdDraw.isMousePressed()) {
 //            StdDraw.pause(10);
@@ -144,22 +149,21 @@ public class Ex2_GUI {
 //            }
 //        }
 //        drawMap(mymap);
-
-       while (true){
-            if (StdDraw.isMousePressed()){
-                int x = (int) (StdDraw.mouseX());
-                int y = (int) (StdDraw.mouseY());
-                start = new Index2D(x , y);
-                if (mymap.isInside(start)){
-                    Map2D dismap = mymap.allDistance(start, -1 , true);
-                    drawMap(dismap);
-                }
-                StdDraw.pause(100);
-                if (!StdDraw.isMousePressed()){
-                    drawMap(mymap);
-                }
-            }
-        }
+//       while (true){
+//            if (StdDraw.isMousePressed()){
+//                int x = (int) (StdDraw.mouseX());
+//                int y = (int) (StdDraw.mouseY());
+//                start = new Index2D(x , y);
+//                if (mymap.isInside(start)){
+//                    Map2D dismap = mymap.allDistance(start, -1 , true);
+//                    drawMap(dismap);
+//                }
+//                StdDraw.pause(100);
+//                if (!StdDraw.isMousePressed()){
+//                    drawMap(mymap);
+//                }
+//            }
+//        }
 
     }
 
