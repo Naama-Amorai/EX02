@@ -328,39 +328,47 @@ public class Map implements Map2D, Serializable {
             while (!q.isEmpty()) {
                 Pixel2D current = q.poll();
                 Pixel2D neighbor1, neighbor2, neighbor3, neighbor4;
-                if (cyclic){
-                neighbor1 = new Index2D((current.getX() + 1) % this.getWidth(), current.getY());
-                neighbor2 = new Index2D((current.getX() - 1 + this.getWidth()) % this.getWidth(), current.getY());
-                neighbor3 = new Index2D(current.getX(), (current.getY() + 1) % this.getHeight());
-                neighbor4 = new Index2D(current.getX(), (current.getY() - 1 + this.getHeight()) % this.getHeight());
-                }
-                else {
+                if (cyclic) {
+                    neighbor1 = new Index2D((current.getX() + 1) % this.getWidth(), current.getY());
+                    neighbor2 = new Index2D((current.getX() - 1 + this.getWidth()) % this.getWidth(), current.getY());
+                    neighbor3 = new Index2D(current.getX(), (current.getY() + 1) % this.getHeight());
+                    neighbor4 = new Index2D(current.getX(), (current.getY() - 1 + this.getHeight()) % this.getHeight());
+                } else {
                     neighbor1 = new Index2D(current.getX() + 1, current.getY());
                     neighbor2 = new Index2D(current.getX() - 1, current.getY());
                     neighbor3 = new Index2D(current.getX(), current.getY() + 1);
                     neighbor4 = new Index2D(current.getX(), current.getY() - 1);
                 }
-                if (isInside(neighbor1) && getPixel(neighbor1) == old_color){
-                    setPixel(neighbor1 , new_v);
-                    q.add(neighbor1);
-                    counter ++;
-                }
-                if (isInside(neighbor2) && getPixel(neighbor2) == old_color){
-                    setPixel(neighbor2 , new_v);
-                    q.add(neighbor2);
-                    counter ++;
-                }
-                if (isInside(neighbor3) && getPixel(neighbor3) == old_color){
-                    setPixel(neighbor3 , new_v);
-                    q.add(neighbor3);
-                    counter ++;
-                }
-                if (isInside(neighbor4) && getPixel(neighbor4) == old_color){
-                    setPixel(neighbor4 , new_v);
-                    q.add(neighbor4);
-                    counter ++;
+                Pixel2D[] neighbors = {neighbor1, neighbor2, neighbor3, neighbor4};
+                for (Pixel2D n : neighbors) {
+                    if (isInside(n) && getPixel(n) == old_color) {
+                        setPixel(n, new_v);
+                        q.add(n);
+                        counter++;
+                    }
                 }
             }
+//                if (isInside(neighbor1) && getPixel(neighbor1) == old_color){
+//                    setPixel(neighbor1 , new_v);
+//                    q.add(neighbor1);
+//                    counter ++;
+//                }
+//                if (isInside(neighbor2) && getPixel(neighbor2) == old_color){
+//                    setPixel(neighbor2 , new_v);
+//                    q.add(neighbor2);
+//                    counter ++;
+//                }
+//                if (isInside(neighbor3) && getPixel(neighbor3) == old_color){
+//                    setPixel(neighbor3 , new_v);
+//                    q.add(neighbor3);
+//                    counter ++;
+//                }
+//                if (isInside(neighbor4) && getPixel(neighbor4) == old_color){
+//                    setPixel(neighbor4 , new_v);
+//                    q.add(neighbor4);
+//                    counter ++;
+//                }
+//            }
     return counter;
     }
 

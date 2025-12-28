@@ -20,17 +20,23 @@ public class Ex2_GUI {
         if (map == null) {
             throw new RuntimeException();
         }
-        StdDraw.setCanvasSize(setCanvasWidth(map), setCanvasHeight(map));
-        StdDraw.setXscale(0, map.getWidth());
-        StdDraw.setYscale(0, map.getHeight());
-        StdDraw.setYscale(map.getHeight(), 0);
+        StdDraw.setXscale(0, map.getWidth() );
+        StdDraw.setYscale(map.getHeight() , 0);
         StdDraw.enableDoubleBuffering();
         StdDraw.clear(StdDraw.BLACK);
         for (int x = 0; x < map.getWidth(); x++) {
             for (int y = 0; y < map.getHeight(); y++) {
                 Color c = setcolor(map.getPixel(x, y));
                 StdDraw.setPenColor(c);
-                StdDraw.filledSquare(x + 0.5, y + 0.5, 0.48);
+                if (map.getPixel(x, y) == 0 || map.getPixel(x, y) == -1) {
+                    StdDraw.filledSquare(x + 0.5, y + 0.5, 0.48);
+                }
+                else {
+                    StdDraw.setPenColor(Color.WHITE);
+                    StdDraw.filledSquare(x + 0.5, y + 0.5, 0.48);
+                    StdDraw.setPenColor(c);
+                    StdDraw.filledCircle(x + 0.5, y + 0.5, 0.3);
+                }
             }
         }
         StdDraw.show();
@@ -92,22 +98,68 @@ public class Ex2_GUI {
     }
 
     public static void main(String[] a) throws IOException {
-        Map mymap = new Map(5,5,0);
-        Pixel2D p1 = new Index2D(1,0);
-        Pixel2D p2 = new Index2D(2,4);
+        Map mymap = new Map(10,10,0);
+       StdDraw.setCanvasSize(800,800);
+        Pixel2D p1 = new Index2D(1,1);
+        Pixel2D p2 = new Index2D(1, mymap.getHeight()-2);
         Pixel2D start = new Index2D(1,1);
+        Pixel2D end = new Index2D(1,1);
         mymap.drawRect(p1 , p2 , -1);
-        String mapFile = "map.txt";
-        saveMap(mymap , mapFile);
-        mymap.printMap();
         drawMap(mymap);
-        StdDraw.pause(2000);
-        Map2D ans = new Map();
-        ans = mymap.allDistance(start , -1 , false);
-        drawMap(ans);
-        String allDistanceFile = "map_allDistance.txt";
-        saveMap(ans , allDistanceFile);
+        StdDraw.pause(1000);
+//        System.out.println("clik on start point");
+//        while (!StdDraw.isMousePressed()) {
+//            StdDraw.pause(10);
+//        }
+//        int x1 = (int) (StdDraw.mouseX());
+//        int y1 = (int) (StdDraw.mouseY());
+//        start = new Index2D(x1, y1);
+//        mymap.setPixel(start, 2);
+//        drawMap(mymap);
+//        while (StdDraw.isMousePressed()) {
+//            StdDraw.pause(10);
+//        }
+//        System.out.println("Click on finish point");
+//       while (!StdDraw.isMousePressed()) {
+//            StdDraw.pause(10);
+//        }
+//        int x2 = (int) (StdDraw.mouseX());
+//        int y2 = (int) (StdDraw.mouseY());
+//        end = new Index2D(x2, y2);
+//        mymap.setPixel(end, 3);
+//        drawMap(mymap);
+//        StdDraw.pause(500);
+//        Pixel2D[] ans_short = mymap.shortestPath(start, end , -1 , true);
+//        if (ans_short == null){
+//            mymap.setPixel(start, 0);
+//            mymap.setPixel(end, 0);
+//            System.out.println("no Path found...");
+//
+//        }
+//        else {
+//            for (int i = 1; i < ans_short.length-1 ; i++) {
+//                if (mymap.isInside(ans_short[i])) {
+//                    mymap.setPixel(ans_short[i], 1);
+//                }
+//            }
+//        }
+//        drawMap(mymap);
 
+       while (true){
+            if (StdDraw.isMousePressed()){
+                int x = (int) (StdDraw.mouseX());
+                int y = (int) (StdDraw.mouseY());
+                start = new Index2D(x , y);
+                if (mymap.isInside(start)){
+                    Map2D dismap = mymap.allDistance(start, -1 , true);
+                    drawMap(dismap);
+                }
+                StdDraw.pause(100);
+                if (!StdDraw.isMousePressed()){
+                    drawMap(mymap);
+                }
+            }
+        }
 
     }
 
@@ -149,7 +201,7 @@ public class Ex2_GUI {
 
         }
         public static int setCanvasWidth (Map2D map){
-            final int factor = 100;
+            final int factor = 50;
             if (map == null) {
                 return 0;
             }
@@ -165,7 +217,7 @@ public class Ex2_GUI {
         }
 
         public static int setCanvasHeight (Map2D map){
-            final int factor = 100;
+            final int factor = 50;
             if (map == null) {
                 return 0;
             }
